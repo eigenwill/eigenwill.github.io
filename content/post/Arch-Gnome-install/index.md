@@ -1,7 +1,10 @@
 ---
 title: "Arch Linux 安装与 Gnome 桌面环境配置"
+description: 使用archintall自动安装脚本快速安装，并配置Gnome桌面、插件以及常用功能
 date: 2024-04-08 21:59:09+08:00
 ---
+
+## archinstall
 
 使用iwctl连接wifi
 
@@ -48,14 +51,14 @@ Server = https://repo.huaweicloud.com/archlinuxcn/$arch # 华为开源镜像站
 sudo pacman -Syyu
 ```
 
-1. 安装 `archlinuxcn` 源的 `key`
+2. 安装 `archlinuxcn` 源的 `key`
 
 ```bash
 sudo pacman-key --lsign-key "farseerfc@archlinux.org" # 在本地信任key
 sudo pacman -S archlinuxcn-keyring # cn源签名
 ```
 
-1. 安装 `yay`
+3. 安装 `yay`
 
 ```bash
 sudo pacman -S yay # yay在cn源里
@@ -69,17 +72,10 @@ sudo pacman -S yay # yay在cn源里
 sudo pacman -S timeshift
 ```
 
-1. 如果Timeshift没有自动备份，那么就需要手动开启 `cronie` 服务
+2. 如果Timeshift没有自动备份，那么就需要手动开启 `cronie` 服务
 
 ```bash
 sudo systemctl enable --now cronie.service
-```
-
-## 配置透明代理
-
-```bash
-sudo pacman -S v2ray v2raya
-sudo systemctl enable --now v2raya.service
 ```
 
 ## 安装字体
@@ -99,7 +95,7 @@ sudo pacman -S fcitx5-im # 输入法基础包组
 sudo pacman -S fcitx5-chinese-addons # 中文输入
 ```
 
-1. 设置环境变量，编辑文件 `/etc/environment` 加入以下内容
+2. 设置环境变量，编辑文件 `/etc/environment` 加入以下内容
 
 ```
 GTK_IM_MODULE=fcitx5
@@ -109,7 +105,7 @@ SDL_IM_MODULE=fcitx5
 GLFW_IM_MODULE=ibus
 ```
 
-1. 安装Gnome的输入法扩展
+3. 安装Gnome的输入法扩展
 
 ```bash
 yay -S gnome-shell-extension-kimpanel-git
@@ -144,7 +140,7 @@ yay -S gnome-shell-extension-dash-to-dock
 
 再在Extension程序里打开相应开关即可
 
-1. 窗口最大化最小化按钮
+2. 窗口最大化最小化按钮
 
 Gnome鼓励使用 `super` 键或者 `ALT+TAB` 键切换应用，但是没有最大化和最小化还是不方便，安装了 `gnome-tweak` 之后，在Tweak程序里，选择Window选项卡就可以更改设置
 
