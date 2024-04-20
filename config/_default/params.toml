@@ -76,7 +76,7 @@ enabled = true
 ## Comments
 [comments]
 enabled = true
-provider = "disqus"
+provider = "waline"
 
 [comments.disqusjs]
 shortname = ""
@@ -104,13 +104,13 @@ clientSecret = ""
 autoCreateIssue = false
 
 [comments.waline]
-serverURL = ""
-lang = ""
-visitor = ""
+serverURL = "https://waline-test-wheat-iota.vercel.app"
+lang = "zh-CN"
+visitor = "false"
 avatar = ""
 emoji = ["https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo"]
 requiredMeta = ["name", "email", "url"]
-placeholder = ""
+placeholder = "怎么没人说话⊂(˃̶͈̀ε ˂̶͈́ ⊂ )人都在哪里(๑•̌.•๑)在哪里ʕ⸝⸝⸝˙Ⱉ˙ʔ"
 
 [comments.waline.locale]
 admin = "Admin"
