@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Will's blog</title><link>https://eigenwill.github.io/post/</link><description>Recent content in Posts on Will's blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Tue, 23 Apr 2024 14:11:57 +0800</lastBuildDate><atom:link href="https://eigenwill.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>半导体中的量子输运(1)</title><link>https://eigenwill.github.io/p/%E5%8D%8A%E5%AF%BC%E4%BD%93%E4%B8%AD%E7%9A%84%E9%87%8F%E5%AD%90%E8%BE%93%E8%BF%901/</link><pubDate>Tue, 23 Apr 2024 14:11:57 +0800</pubDate><guid>https://eigenwill.github.io/p/%E5%8D%8A%E5%AF%BC%E4%BD%93%E4%B8%AD%E7%9A%84%E9%87%8F%E5%AD%90%E8%BE%93%E8%BF%901/</guid><description>&lt;h1 id="prologue-an-atomistic-view-of-electrical-resistance">
+&lt;a href="#prologue-an-atomistic-view-of-electrical-resistance">#&lt;/a>
+Prologue: an atomistic view of electrical resistance
+&lt;/h1>&lt;h2 id="energy-level-diagram">
+&lt;a href="#energy-level-diagram">#&lt;/a>
+Energy level diagram
+&lt;/h2>&lt;p>每一层能级电子的占据数量由 Fermi function 决定&lt;/p>
+&lt;p>$f_0(E-\mu)=\frac1{1+\exp[(E-\mu)/k_\text{B}T]}$&lt;/p>
+&lt;p>电流是由化学势 $E = \mu$ 附近的&lt;strong>可获取的&lt;/strong>能级的数量决定的&lt;/p>
+&lt;p>正的$V_G$ 将能级拉低&lt;/p>
+&lt;p>所以阈值电压$V_T$ 是化学势$\mu$ 和&lt;strong>最低可获取的空状态&lt;/strong>也就是导带底的静电势之差&lt;/p>
+&lt;h2 id="what-makes-electrons-flow">
+&lt;a href="#what-makes-electrons-flow">#&lt;/a>
+What makes electrons flow?
+&lt;/h2>&lt;p>这一节是来解释为什么：&lt;/p>
+&lt;blockquote>
+&lt;p>电流是由化学势 $E = \mu$ 附近的&lt;strong>可获取的&lt;/strong>能级的数量决定的，而与能级是否被占据无关&lt;/p>
+&lt;/blockquote>
+&lt;p>在源漏两端加上电压：&lt;/p>
+&lt;p>$\mu_1 - \mu_2 = q V_D$&lt;/p>
+&lt;p>$f_1(E)\equiv\frac1{1+\exp[(E-\mu_1)/k_\text{B}T]}=f_0(E-\mu_1)$&lt;/p>
+&lt;p>$f_2(E)\equiv\frac1{1+\exp[(E-\mu_2)/k_\text{B}T]}=f_0(E-\mu_2)$&lt;/p>
+&lt;h3 id="one-level-model">
+&lt;a href="#one-level-model">#&lt;/a>
+one level model
+&lt;/h3>&lt;p>假设沟道中只有一个能级$\varepsilon$在两侧接触的化学势的中间，那么两个接触分别希望看到沟道中有$f_1(\varepsilon)$ 和$f_2(\varepsilon)$ 个电子，所以平均电子数量$N$ 在$f_1(\varepsilon)$和$f_2(\varepsilon)$ 之间，数量不均匀会导致电流流过：&lt;/p>
+&lt;p>$I_1=\frac{q\mathrm{~}\gamma_1}\hbar(f_1-N)$&lt;/p>
+&lt;p>$I_2=\frac{q\gamma_2}\hbar(f_2-N)$&lt;/p>
+&lt;p>其中$\gamma / \hbar$ 可以被解释为电子处于能级$\varepsilon$ 可以流向源或者漏的概率。&lt;/p>
+&lt;p>在平衡状态下：&lt;/p>
+&lt;p>$I=I_1=-I_2=\frac q\hbar\frac{\gamma_1\gamma_2}{\gamma_1+\gamma_2}\left[f_1(\varepsilon)-f_2(\varepsilon)\right]$&lt;/p>
+&lt;p>所以只有能级在两个化学式$\mu$ 中间的能级才能对电流有贡献，而与能级是否被占据无关，只是电子先被注入还是先被抽走的区别罢了。&lt;/p>
+&lt;h3 id="pauli-blocking">
+&lt;a href="#pauli-blocking">#&lt;/a>
+Pauli blocking
+&lt;/h3>&lt;p>因为泡利不相容，所以influx不止单独跟contact相关，而是跟channel里电子的数量相关，对outflux也一样，所以电流应该是$\gamma_1f_1(1-N)$ 和$\gamma_1N(1-f_1)$ ，但是最终两者之和是一样的，结果不变的。&lt;/p>
+&lt;p>但是contact和channel耦合带来的level broadening是会带来影响的，好像还跟$\gamma$ 的物理含义有关，但是书中没有明讲，要看第9章和第10章还有附录。&lt;/p>
+&lt;h2 id="the-quantum-of-conductance">
+&lt;a href="#the-quantum-of-conductance">#&lt;/a>
+The quantum of conductance
+&lt;/h2>&lt;p>假设有一个但能级系统且温度很低：&lt;/p>
+&lt;p>$I=\frac q\hbar\frac{\gamma_1\gamma_2}{\gamma_1+\gamma_2}=\frac{q\gamma_1}{2\hbar}\quad\mathrm{~if~}\quad\gamma_2=\gamma_1$&lt;/p>
+&lt;p>增加 $\gamma$ 应该会让电流无限增长，但是电导有个上限：&lt;/p>
+&lt;p>$G_0\equiv q^2/h=38.7\mathrm{~\mu S}=(25.8\mathrm{~k}\Omega)^{-1}$&lt;/p>
+&lt;p>[image]&lt;br>
+(&lt;a class="link" href="zotero://select/library/items/6W5WRBAX" >Datta, 2005, p. 11&lt;/a>)&lt;/p>
+&lt;p>[image]&lt;/p>
+&lt;p>缺少考虑的部分就是&lt;strong>level broadening&lt;/strong> 能级展宽。沟道中的能级会在金属接触位置发生展宽。由于一部分能级将超出两边化学势的范围，电流将会减少 $(\mu_1-\mu_2)/C\gamma_1$ ，$C\gamma_1$ 是能级的宽度,&lt;/p>
+&lt;p>$I=\frac{q\gamma_1}{2\hbar}\frac{qV_{\mathrm{D}}}{C\gamma_1}\to G=\frac I{V_{\mathrm{D}}}=\frac{q^2}{2C\hbar}$&lt;/p>
+&lt;p>&lt;em>为什么只考虑source附近的展宽？&lt;/em>&lt;/p>
+&lt;p>DOS在channel和contact耦合之后会扩展，有一些state从channel进入contact,有一些从contact进入channel，因为获得的state来自许多能级，所以channel中的DOS会展宽，可以用洛伦兹分布建模：&lt;/p>
+&lt;p>$D_\varepsilon(E)=\frac{\gamma/2\pi}{\left(E-\varepsilon\right)^2+\left(\gamma/2\right)^2}$&lt;/p>
+&lt;p>$\gamma$ 的物理含义会在第8章解释，但是可以简单认为态的寿命 $\hbar / \gamma$ （它的倒数就是电子的逃逸概率，如前一节所述），和能级展宽 $\gamma$ 的乘积等于 $\hbar$ ——不确定性原理。&lt;/p>
+&lt;p>我们可以计算电流了（假设温度很低且电压很小）&lt;/p>
+&lt;p>$I=\frac q\hbar\int_{-\infty}^{+\infty}\mathrm{d}ED_\varepsilon(E)\frac{\gamma_1\gamma_2}{\gamma_1+\gamma_2}\left[f_1(E)-f_2(E)\right]$&lt;/p>
+&lt;p>$\begin{aligned}f_1(E)-f_2(E)&amp;amp;=1\quad\mathrm{~if~}\quad\mu_1&amp;gt;E&amp;gt;\mu_2\&amp;amp;=0\quad\mathrm{otherwise}\end{aligned}$&lt;/p>
+&lt;p>$I=\frac q\hbar\frac{\gamma_1\gamma_2}{\gamma_1+\gamma_2}\intop_{\mu_2}^{\mu_1}\mathrm{d}ED_{\varepsilon}(E)$&lt;/p>
+&lt;p>$I=\frac q\hbar\frac{\gamma_1\gamma_2}{\gamma_1+\gamma_2}(\mu_1-\mu_2)\frac{(\gamma_1+\gamma_2)/2\pi}{(\mu-\varepsilon)^2+(\gamma_1+\gamma_2)^2}$&lt;/p>
+&lt;p>$G\equiv\frac I{V_{\mathrm{D}}}=\frac{q^2}h\frac{4\gamma_1\gamma_2}{\left(\gamma_1+\gamma_2\right)^2}=\frac{q^2}h\quad\mathrm{if}\quad\gamma_1=\gamma_2$&lt;/p>
+&lt;p>最终可以得到 $G$ ，这一步与source或者drain无关。&lt;/p>
+&lt;h2 id="potential-profile">
+&lt;a href="#potential-profile">#&lt;/a>
+Potential profile
+&lt;/h2>&lt;p>[image] (&lt;a class="link" href="zotero://open-pdf/library/items/LSXK6XVI?page=31&amp;amp;annotation=N5UT9XSL" >pdf&lt;/a>)&lt;br>
+(&lt;a class="link" href="zotero://select/library/items/6W5WRBAX" >Datta, 2005, p. 16&lt;/a>)&lt;/p>
+&lt;p>如果不加gate，那么channel中的能级会随着源漏电压变化，理想情况下会一直处于源漏化学势的中间。但是加上gate，能级就会受gate电压调控，而不受源漏电压影响，这就导致源漏加正电和负电是不一样的，所以需要明确知道沟道电势来描述电流大小。&lt;/p>
+&lt;p>下面我们来计算channel中的电势。&lt;/p>
+&lt;blockquote>
+&lt;p>三个电容在不同支路上呈Y字型分布，由于三个电容均从同一个节点中获得电荷，由于电荷守恒，所以三个电容上的电荷 $Q = CV$ 相加应该等于 $0$ ，就可以得到中心节点的电压取值。&lt;/p>
+&lt;/blockquote>
+&lt;p>根据电容模型可以得到：&lt;/p>
+&lt;p>$\begin{aligned}U_\mathrm{L}&amp;amp;=\frac{C_\mathrm{G}}{C_\mathrm{E}}\left(-qV_\mathrm{G}\right)+\frac{C_\mathrm{D}}{C_\mathrm{E}}\left(-qV_\mathrm{D}\right)\end{aligned}$&lt;/p>
+&lt;p>要记住角标L代表这个值是从拉普拉斯方程中获得，假设沟道中电荷为0.&lt;/p>
+&lt;p>否则需要使用泊松方程：&lt;/p>
+&lt;p>$\vec{\nabla}\cdot(\varepsilon_\mathrm{r}\vec{\nabla}V)=-\Delta\rho/\varepsilon_0$&lt;/p>
+&lt;p>$\begin{aligned}-q\Delta N=C_\mathrm{S}V+C_\mathrm{G}(V-V_\mathrm{G})+C_\mathrm{D}(V-V_\mathrm{D})\end{aligned}$&lt;/p>
+&lt;p>$U=U_\mathrm{L}+\frac{q^2}{C_\mathrm{E}}\Delta N$&lt;/p>
+&lt;p>常数 $q^2/C_\mathrm{E}\equiv U_0$ 代表没增加一个电子，势能的改变量。电子数量的该变量 $\Delta N$ 是相对于原来就在channel里能级 $\varepsilon$ 附近的电子数量 $N_0$ 来说的。&lt;/p>
+&lt;p>&lt;em>为什么沟道内本来就有电荷，而不需要考虑进去呢，因为我们只关注改变量？&lt;/em>&lt;/p>
+&lt;h3 id="iterative-procedure-for-self-consistent-solution">
+&lt;a href="#iterative-procedure-for-self-consistent-solution">#&lt;/a>
+Iterative procedure for self-consistent solution
+&lt;/h3>&lt;p>电势能的影响DOS的分布，&lt;/p>
+&lt;p>$\begin{aligned}N=\int_{-\infty}^{+\infty}\mathrm{d}ED_{\varepsilon}(E-U)\frac{\gamma_1f_1(E)+\gamma_2f_2(E)}{\gamma_1+\gamma_2}\end{aligned}$&lt;/p>
+&lt;p>$\begin{aligned}I&amp;amp;=\frac q\hbar\int_{-\infty}^{+\infty}\mathrm{d}ED_{\varepsilon}(E-U)\frac{\gamma_1\gamma_2}{\gamma_1+\gamma_2}\left[f_1(E)-f_2(E)\right]\end{aligned}$&lt;/p>
+&lt;blockquote>
+&lt;p>$E-U$ 意味着能级 $\varepsilon$ 被抬高，$V_G$ 和 $V_D$ 越小能级越高，电子越多能级越高，是与现实是吻合的&lt;/p>
+&lt;/blockquote>
+&lt;p>由于 $U$ 中包含 $N$ ，$N$ 中包含 $U$ ，所以需要用迭代方法求解两者的自洽解：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">1. guess a start U0
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">2. calculate N
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">3. use N to calculate Ucalc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">4. update U: Unew = Uold + alpha * (Ucalc - Uold)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">5. repeat 2 until Unew - Uold &amp;lt; some converge value
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>但这个模型只能在小器件使用，因为假设了电势在沟道内处处相等&lt;/p>
+&lt;/blockquote>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-matlab" data-lang="matlab">&lt;span class="line">&lt;span class="cl">&lt;span class="n">clear&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">%Constants (all MKS, except energy which is in eV)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">hbar&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">1.055e-34&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">q&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">1.602e-19&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">I0&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">q&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">q&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">hbar&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">%Parameters&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">U0&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">0.025&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">kT&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">0.025&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">mu&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">epsilon&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">0.2&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">gamma1&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">0.005&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">gamma2&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">0.005&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">gamma&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">gamma1&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">gamma2&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">alphag&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">alphad&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">0.5&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">%Energy grid&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">E_grid_num&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">501&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">E&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="nb">linspace&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">E_grid_num&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">dE&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">D&lt;/span>&lt;span class="p">=(&lt;/span>&lt;span class="n">g&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nb">pi&lt;/span>&lt;span class="p">))&lt;/span>&lt;span class="o">./&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="o">.^&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">g&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="mi">2&lt;/span>&lt;span class="p">)&lt;/span>^&lt;span class="mi">2&lt;/span>&lt;span class="p">));&lt;/span>&lt;span class="c">% Lorentzian Density of states per eV&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">D&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">D&lt;/span>&lt;span class="o">./&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">dE&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">sum&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">D&lt;/span>&lt;span class="p">));&lt;/span>&lt;span class="c">%Normalizing to one&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">%Bias&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">V_grid_num&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">101&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">V&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="nb">linspace&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">V_grid_num&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">for&lt;/span> &lt;span class="n">iV&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="n">V_grid_num&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">Vg&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">Vd&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">V&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">iV&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="c">%Vd=0;Vg=V(iV); &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">mu1&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">mu&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">mu2&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">mu1&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">Vd&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">UL&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">alphag&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">Vg&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">alphad&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">Vd&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">U&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span>&lt;span class="c">%Self-consistent ﬁeld &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">dU&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="k">while&lt;/span> &lt;span class="n">dU&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="mf">1e-6&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">        &lt;span class="n">f1&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">1.&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="nb">exp&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">epsilon&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">UL&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">U&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">mu1&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">./&lt;/span>&lt;span class="n">kT&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">        &lt;span class="n">f2&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="mf">1.&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">1&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="nb">exp&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">E&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">epsilon&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">UL&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="n">U&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">mu2&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">./&lt;/span>&lt;span class="n">kT&lt;/span>&lt;span class="p">));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">        &lt;span class="n">N&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">iV&lt;/span>&lt;span class="p">)=&lt;/span>&lt;span class="n">dE&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">sum&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">D&lt;/span>&lt;span class="o">.*&lt;/span>&lt;span class="p">((&lt;/span>&lt;span class="n">f1&lt;/span>&lt;span class="o">.*&lt;/span>&lt;span class="n">gamma1&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="nb">gamma&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">f2&lt;/span>&lt;span class="o">.*&lt;/span>&lt;span class="n">gamma2&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="nb">gamma&lt;/span>&lt;span class="p">)));&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">        &lt;span class="n">Unew&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">U0&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">iV&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">        &lt;span class="n">dU&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="nb">abs&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">U&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">Unew&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">        &lt;span class="n">U&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">U&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="mf">0.1&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Unew&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">U&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="k">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">    &lt;span class="n">I&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">iV&lt;/span>&lt;span class="p">)=&lt;/span>&lt;span class="n">dE&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">I0&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">sum&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">D&lt;/span>&lt;span class="o">.*&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">f1&lt;/span>&lt;span class="o">-&lt;/span>&lt;span class="n">f2&lt;/span>&lt;span class="p">)))&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">g1&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="n">g2&lt;/span>&lt;span class="o">/&lt;/span>&lt;span class="n">g&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">end&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">hold&lt;/span> &lt;span class="n">on&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="n">h&lt;/span>&lt;span class="p">=&lt;/span>&lt;span class="n">plot&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">V&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="n">N&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="s">&amp;#39;b&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c">%h=plot(V,I,&amp;#39;b&amp;#39;); &lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;blockquote>
+&lt;p>需要说明的是，程序与之前所写的公式有些许不同，因为DOS需要进行归一化，所以每一次都进行迭代不合理，又因为对能量的积分范围很大，所以将它与U有关的偏置放在费米函数里是合理的。相当于将DOS的上移变成了费米分布的下移，它们的overlap也就是乘积的积分是一样的。&lt;/p>
+&lt;/blockquote></description></item><item><title>Arch Linux 安装与 Gnome 桌面环境配置</title><link>https://eigenwill.github.io/p/arch-linux-%E5%AE%89%E8%A3%85%E4%B8%8E-gnome-%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link><pubDate>Mon, 08 Apr 2024 21:59:09 +0800</pubDate><guid>https://eigenwill.github.io/p/arch-linux-%E5%AE%89%E8%A3%85%E4%B8%8E-gnome-%E6%A1%8C%E9%9D%A2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid><description>&lt;p>这是一个前一段时间将工位笔记本装入Arch Linux系统的记录。&lt;/p>
+&lt;p>这台笔记本已经用了6年了，在Windows下卡卡的。下定决心将它刷成Linux后，最初是用的Ubuntu，但是后来发现在安装一些程序的时候总是会出现依赖包版本不够新的问题。&lt;/p>
+&lt;p>再后来就听说了Arch邪教。。。实际体验下来Arch只有一开始安装麻烦了点，安装好之后就很省心，不需要什么额外操作，记得定时更新就好了。也可能是因为我不需要装Nvidia显卡驱动吧（笑&lt;/p>
+&lt;h2 id="archinstall">
+&lt;a href="#archinstall">#&lt;/a>
+archinstall
+&lt;/h2>&lt;p>使用iwctl连接wifi&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">iwctl
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>使用archinstall进行脚本安装&lt;/p>
+&lt;table>
+&lt;thead>
+&lt;tr>
+&lt;th>选项&lt;/th>
+&lt;th>内容&lt;/th>
+&lt;/tr>
+&lt;/thead>
+&lt;tbody>
+&lt;tr>
+&lt;td>Mirror&lt;/td>
+&lt;td>China&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Disk configuration&lt;/td>
+&lt;td>ext4, no for /home&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Bootloader&lt;/td>
+&lt;td>Grub&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Profile&lt;/td>
+&lt;td>Desktop/Gnome/Intel open source graphics driver (这个driver自动安装inte-ucode)&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Audio&lt;/td>
+&lt;td>Pipewire&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Network configuration&lt;/td>
+&lt;td>NetworkManager&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Timezone&lt;/td>
+&lt;td>Shanghai&lt;/td>
+&lt;/tr>
+&lt;tr>
+&lt;td>Additional repository&lt;/td>
+&lt;td>mutilib&lt;/td>
+&lt;/tr>
+&lt;/tbody>
+&lt;/table>
+&lt;p>使用gnome可以使用向日葵，但是KDE不行&lt;/p>
+&lt;p>需要手动开启gdm&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">systemctl &lt;span class="nb">enable&lt;/span> gdm
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="配置archlinuxcn软件源和aur">
+&lt;a href="#%e9%85%8d%e7%bd%aearchlinuxcn%e8%bd%af%e4%bb%b6%e6%ba%90%e5%92%8caur">#&lt;/a>
+配置archlinuxcn软件源和aur
+&lt;/h2>&lt;ol>
+&lt;li>编辑 &lt;code>/etc/pacman.conf&lt;/code> 文件，在文件结尾加入 &lt;code>archlinuxcn&lt;/code> 源&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="o">[&lt;/span>archlinuxcn&lt;span class="o">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Server&lt;/span> &lt;span class="o">=&lt;/span> https://mirrors.ustc.edu.cn/archlinuxcn/&lt;span class="nv">$arch&lt;/span> &lt;span class="c1"># 中国科学技术大学开源镜像站&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Server&lt;/span> &lt;span class="o">=&lt;/span> https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/&lt;span class="nv">$arch&lt;/span> &lt;span class="c1"># 清华大学开源软件镜像站&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Server&lt;/span> &lt;span class="o">=&lt;/span> https://mirrors.hit.edu.cn/archlinuxcn/&lt;span class="nv">$arch&lt;/span> &lt;span class="c1"># 哈尔滨工业大学开源镜像站&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">Server&lt;/span> &lt;span class="o">=&lt;/span> https://repo.huaweicloud.com/archlinuxcn/&lt;span class="nv">$arch&lt;/span> &lt;span class="c1"># 华为开源镜像站&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol>
+&lt;li>刷新 &lt;code>pacman&lt;/code> 数据库&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo pacman -Syyu
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="2">
+&lt;li>安装 &lt;code>archlinuxcn&lt;/code> 源的 &lt;code>key&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo pacman-key --lsign-key &lt;span class="s2">&amp;#34;farseerfc@archlinux.org&amp;#34;&lt;/span> &lt;span class="c1"># 在本地信任key&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo pacman -S archlinuxcn-keyring &lt;span class="c1"># cn源签名&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="3">
+&lt;li>安装 &lt;code>yay&lt;/code>&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo pacman -S yay &lt;span class="c1"># yay在cn源里&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装timeshift">
+&lt;a href="#%e5%ae%89%e8%a3%85timeshift">#&lt;/a>
+安装Timeshift
+&lt;/h2>&lt;ol>
+&lt;li>安装 &lt;code>timeshift&lt;/code> 软件包&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo pacman -S timeshift
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="2">
+&lt;li>如果Timeshift没有自动备份，那么就需要手动开启 &lt;code>cronie&lt;/code> 服务&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo systemctl &lt;span class="nb">enable&lt;/span> --now cronie.service
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="安装字体">
+&lt;a href="#%e5%ae%89%e8%a3%85%e5%ad%97%e4%bd%93">#&lt;/a>
+安装字体
+&lt;/h2>&lt;ul>
+&lt;li>英文字符： &lt;code>noto-fonts&lt;/code>&lt;/li>
+&lt;li>中文字符： &lt;code>noto-fonts-cjk&lt;/code>&lt;/li>
+&lt;li>emoji： &lt;code>noto-fonts-emoji&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>字符中 &lt;code>sans&lt;/code> 代表有衬线， &lt;code>serif&lt;/code> 代表无衬线， &lt;code>monospace&lt;/code> 代表等宽&lt;/p>
+&lt;h2 id="安装中文输入法">
+&lt;a href="#%e5%ae%89%e8%a3%85%e4%b8%ad%e6%96%87%e8%be%93%e5%85%a5%e6%b3%95">#&lt;/a>
+安装中文输入法
+&lt;/h2>&lt;ol>
+&lt;li>安装 &lt;code>fcitx5&lt;/code> 软件包&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo pacman -S fcitx5-im &lt;span class="c1"># 输入法基础包组&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo pacman -S fcitx5-chinese-addons &lt;span class="c1"># 中文输入&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="2">
+&lt;li>设置环境变量，编辑文件 &lt;code>/etc/environment&lt;/code> 加入以下内容&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-fallback" data-lang="fallback">&lt;span class="line">&lt;span class="cl">GTK_IM_MODULE=fcitx5
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">QT_IM_MODULE=fcitx5
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">XMODIFIERS=@im=fcitx5
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">SDL_IM_MODULE=fcitx5
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">GLFW_IM_MODULE=ibus
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;ol start="3">
+&lt;li>安装Gnome的输入法扩展&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yay -S gnome-shell-extension-kimpanel-git
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="功耗控制">
+&lt;a href="#%e5%8a%9f%e8%80%97%e6%8e%a7%e5%88%b6">#&lt;/a>
+功耗控制
+&lt;/h2>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo pacman -S tlp tlp-rdw
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl &lt;span class="nb">enable&lt;/span> tlp.service
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl &lt;span class="nb">enable&lt;/span> NetworkManager-dispatcher.service &lt;span class="c1"># for tlp-rdw&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl mask systemd-rfkill.service &lt;span class="c1"># 屏蔽以下服务以避免冲突，确保 TLP 无线设备的开关选项可以正确运行&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo systemctl mask systemd-rfkill.socket
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">sudo tlp start &lt;span class="c1"># 手动开启tlp&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>之前电脑还是Windows系统的时候设置过电池充电阈值，可以使用tlp看到&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">sudo tlp-stat -b
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>根据显示信息进入 &lt;code>/sys&lt;/code> 的相应目录可以将充电阈值改掉，以后只用TLP进行功耗管理&lt;/p>
+&lt;h2 id="gnome桌面环境设置">
+&lt;a href="#gnome%e6%a1%8c%e9%9d%a2%e7%8e%af%e5%a2%83%e8%ae%be%e7%bd%ae">#&lt;/a>
+Gnome桌面环境设置
+&lt;/h2>&lt;ol>
+&lt;li>dock&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">yay -S gnome-shell-extension-dash-to-dock
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>再在Extension程序里打开相应开关即可&lt;/p>
+&lt;ol start="2">
+&lt;li>窗口最大化最小化按钮&lt;/li>
+&lt;/ol>
+&lt;p>Gnome鼓励使用 &lt;code>super&lt;/code> 键或者 &lt;code>ALT+TAB&lt;/code> 键切换应用，但是没有最大化和最小化还是不方便，安装了 &lt;code>gnome-tweak&lt;/code> 之后，在Tweak程序里，选择Window选项卡就可以更改设置&lt;/p>
+&lt;h2 id="安装其他常用软件">
+&lt;a href="#%e5%ae%89%e8%a3%85%e5%85%b6%e4%bb%96%e5%b8%b8%e7%94%a8%e8%bd%af%e4%bb%b6">#&lt;/a>
+安装其他常用软件
+&lt;/h2>&lt;p>&lt;strong>pacman&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>neofetch&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>aur&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>&lt;code>wps-office-cn&lt;/code>&lt;/li>
+&lt;li>&lt;code>sunloginclient&lt;/code> ，向日葵安装完需要手动开启 &lt;code>runsunloginclient.service&lt;/code>&lt;/li>
+&lt;li>&lt;code>microsoft-edge-stable&lt;/code>&lt;/li>
+&lt;li>&lt;code>zotero-bin&lt;/code>&lt;/li>
+&lt;li>&lt;code>realvnc-vnc-viewer&lt;/code>&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;p>以后如果有增加什么东西应该会往这里面添加吧，下一篇可能会写一写在搭建博客的时候踩过的坑。&lt;/p></description></item></channel></rss>
