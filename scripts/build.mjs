@@ -167,7 +167,8 @@ export function parseArticle(source, { filename = 'untitled.md', fallbackDate = 
   const heading = parsed.content.match(/^#\s+(.+?)\s*#*\s*$/m)?.[1];
   const title = data.title === undefined ? undefined : shortString(data, 'title', filename, 240, { optional: false, nullable: false });
   const inferredTitle = heading?.replace(/[\x60*_]/g, '').replace(/<[^>]*>/g, '').trim() || stem.replace(/[-_]+/g, ' ');
-  const id = validateSlug(data.slug === undefined ? normalizeSlug(stem) : data.slug, filename);
+  const omittedSlug = data.slug === undefined || data.slug === null || (typeof data.slug === 'string' && !data.slug.trim());
+  const id = validateSlug(omittedSlug ? normalizeSlug(stem) : data.slug, filename);
   const description = shortString(data, 'description', filename, 1000, { nullable: true });
   const category = shortString(data, 'category', filename, 100, { nullable: true }) || '随笔';
   for (const key of ['image', 'license']) shortString(data, key, filename, 1000, { nullable: true });

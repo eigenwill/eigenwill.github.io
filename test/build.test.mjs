@@ -38,6 +38,12 @@ test('frontmatter overrides inferred values and preserves local calendar dates',
   assert.equal(article.originalUrl, 'https://eigenwill.github.io/p/custom-note/');
 });
 
+test('an optional blank CMS slug falls back to the article filename', () => {
+  for (const metadata of ['slug: ""', 'slug:', 'slug: "   "']) {
+    assert.equal(parseArticle(post(metadata), options).id, 'my-first-note');
+  }
+});
+
 test('Markdown tables, fenced code, and duplicate heading anchors are supported', () => {
   const source = '# Topic\n\n## Topic\n\n| A | B |\n| - | - |\n| 1 | 2 |\n\n~~~bash\nprintf "<hello>"\n~~~';
   const html = renderMarkdown(source);
