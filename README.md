@@ -1,57 +1,65 @@
-<img align="right" width="150" alt="logo" src="https://user-images.githubusercontent.com/5889006/190859553-5b229b4f-c476-4cbd-928f-890f5265ca4c.png">
+# Will's blog
 
-# Hugo Theme Stack Starter Template
+博客：**https://eigenwill.github.io/** · 写作后台：**https://eigenwill.github.io/admin/**
 
-This is a quick start template for [Hugo theme Stack](https://github.com/CaiJimmy/hugo-theme-stack). It uses [Hugo modules](https://gohugo.io/hugo-modules/) feature to load the theme.
+延续原博客风格的个人网站：三栏文章列表、全文搜索、年份归档、文章目录、数学公式、代码复制和深色模式。内容以 Markdown 文件维护，GitHub Actions 自动构建并发布到 GitHub Pages。
 
-It comes with a basic theme structure and configuration. GitHub action has been set up to deploy the theme to a public GitHub page automatically. Also, there's a cron job to update the theme automatically everyday.
+## 发布一篇 Markdown 博文
 
-## Get started
+1. 打开 [上传入口](https://github.com/eigenwill/eigenwill.github.io/upload/master/content/posts)，登录自己的 GitHub 账号。
+2. 拖入 `.md` 文件，选择提交到 `master`，点击 **Commit changes**。
+3. 在 [Actions](https://github.com/eigenwill/eigenwill.github.io/actions) 等待部署完成，博客会自动出现新文章。
 
-1. Click *Use this template*, and create your repository on GitHub.
-![Step 1](https://user-images.githubusercontent.com/5889006/156916624-20b2a784-f3a9-4718-aa5f-ce2a436b241f.png)
+普通 Markdown 文件也能上传。推荐使用后台提供的模板填写标题、发布日期和固定链接，方便长期整理。`draft: true` 的文章仅存入仓库，不会发布。
 
-2. Once the repository is created, create a GitHub codespace associated with it.
-![Create codespace](https://user-images.githubusercontent.com/5889006/156916672-43b7b6e9-4ffb-4704-b4ba-d5ca40ffcae7.png)
-
-3. And voila! You're ready to go. The codespace has been configured with the latest version of Hugo extended, just run `hugo server` in the terminal and see your new site in action.
-
-4. Check `config` folder for the configuration files. You can edit them to suit your needs. Make sure to update the `baseurl` property in `config/_default/config.toml` to your site's URL.
-
-5. Once you're done editing the site, just commit it and push it. GitHub action will deploy the site automatically to GitHub page associated with the repository.
-![GitHub action](https://user-images.githubusercontent.com/5889006/156916881-90b8bb9b-1925-4e60-9d7a-8026cda729bf.png)
-
+```markdown
+---
+title: 我的新文章
+date: 2026-10-18
+description: 一句话介绍文章。
+category: 随笔
+tags: [记录]
+slug: my-new-post
+draft: false
 ---
 
-In case you don't want to use GitHub codespace, you can also run this template in your local machine. **You need to install Git, Go and Hugo extended locally.**
+# 正文标题
 
-## Update theme manually
-
-Run:
-
-```bash
-hugo mod get -u github.com/CaiJimmy/hugo-theme-stack/v3
-hugo mod tidy
+在这里开始写作。
 ```
 
-> This starter template has been configured with `v3` version of theme. Due to the limitation of Go module, once the `v4` or up version of theme is released, you need to update the theme manually. (Modifying `config/module.toml` file)
+## 在线编辑与图片管理
 
-## Deploy to another static page hostings
+可选使用 [Pages CMS](https://app.pagescms.org/eigenwill/eigenwill.github.io/master/collection/posts)。首次需要你登录 GitHub 并将 Pages CMS App 授权到本仓库；之后可以在网页编辑正文、管理草稿和上传图片。关闭“保存为草稿”并保存后即触发发布。
 
-If you want to build this site using another static page hosting, you need to make sure they have Go installed in the machine. 
+GitHub 是文章存储和权限管理后端；GitHub Pages 托管公开页面。网站无需额外数据库、服务器或在前端保存访问令牌。后台入口本身是公开的说明页面，实际写入操作均由 GitHub 登录及仓库权限保护。
 
-<details>
-  <summary>Vercel</summary>
-  
-You need to overwrite build command to install manually Go:
+详细步骤见 [发布指南](docs/publishing.md)。
 
+## 本地开发
+
+使用 Node.js 22 或更新的兼容版本：
+
+```sh
+npm ci
+npm test
+npm run build
+python3 -m http.server 4173 --directory dist
 ```
-amazon-linux-extras install golang1.11 && hugo --gc --minify
-```
 
-![](https://user-images.githubusercontent.com/5889006/156917172-01e4d418-3469-4ffb-97e4-a905d28b8424.png)
+打开 `http://localhost:4173`。修改 Markdown 或界面文件后重新运行构建。
 
-Make sure also to specify Hugo version in the environment variable `HUGO_VERSION` (Use the latest version of Hugo extended):
+## 目录
 
-![Environment variable](https://user-images.githubusercontent.com/5889006/156917212-afb7c70d-ab85-480f-8288-b15781a462c0.png)
-</details>
+| 路径 | 用途 |
+| --- | --- |
+| `content/posts/` | Markdown 博文源文件 |
+| `web/` | 前台页面、脚本、样式和 `/admin/` 管理入口 |
+| `public/uploads/` | 上传的图片；公开地址 `/uploads/...` |
+| `.pages.yml` | Pages CMS 后台字段与媒体配置 |
+| `scripts/` | Markdown 构建与发布数据生成 |
+| `test/` | 内容解析、草稿、公式与安全清洗的测试 |
+| `.github/workflows/deploy.yml` | 提交后自动构建并直接部署到 GitHub Pages |
+| `dist/` | 本地构建输出，不提交到源码分支 |
+
+原博客两篇文章及旧文章链接已保留。旧 Hugo 版本位于备份分支 `codex/archive-before-new-blog-20261018`，迁移保留了完整提交历史。

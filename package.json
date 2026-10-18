@@ -1,0 +1,25 @@
+{
+  "name": "eigenwill-blog",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "preview": "node scripts/preview.mjs"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.3.2",
+    "markdown-it": "^14.1.0",
+    "sanitize-html": "^2.17.0"
+  },
+  "overrides": {
+    "gray-matter": {
+      "js-yaml": "$js-yaml"
+    }
+  }
+}

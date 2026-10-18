@@ -1,0 +1,67 @@
+# Pages CMS: https://app.pagescms.org/eigenwill/eigenwill.github.io/master
+# Configuration reference: https://pagescms.org/docs/configuration/
+media:
+  input: public/uploads
+  output: /uploads
+  rename: safe
+
+content:
+  - name: posts
+    label: 博文
+    type: collection
+    path: content/posts
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{primary}.md"
+      field: create
+    subfolders: true
+    view:
+      fields: [title, date, category, draft]
+      primary: title
+      sort: [date, title]
+      search: [title, description, category, tags]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: 标题
+        type: string
+        required: true
+      - name: date
+        label: 发布日期
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: description
+        label: 摘要
+        type: text
+        description: 显示在首页文章卡片中；留空时由正文自动生成。
+      - name: category
+        label: 分类
+        type: string
+        description: 例如：半导体物理、Linux、随笔。
+      - name: tags
+        label: 标签
+        type: string
+        list: true
+      - name: slug
+        label: 文章链接名称
+        type: string
+        description: 可选。推荐使用小写英文字母、数字和连字符；发布后保持不变。
+        pattern:
+          regex: "^(?:[a-z0-9]+(?:-[a-z0-9]+)*)?$"
+          message: 请使用小写英文字母、数字和连字符，例如 my-first-post。
+      - name: draft
+        label: 保存为草稿
+        type: boolean
+        default: true
+        description: 开启时不会出现在公开网站；关闭并保存后自动部署发布。
+      - name: body
+        label: 正文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          switcher: true

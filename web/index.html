@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f6f9">
+  <meta name="description" content="Will 的个人博客，记录学习、研究与日常实践。">
+  <link rel="canonical" href="https://eigenwill.github.io/">
+  <link rel="alternate" type="application/rss+xml" title="Will's blog" href="/index.xml">
+  <title>Will's blog · 学习与记录</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
+  <script>try{document.documentElement.dataset.theme=localStorage.getItem('will-theme')||'light'}catch(e){}</script>
+  <script defer src="assets/katex/katex.min.js"></script>
+  <script defer src="assets/katex/auto-render.min.js"></script>
+  <script defer src="assets/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+  <div class="reading-progress" id="reading-progress"></div>
+  <div class="site-layout">
+    <aside class="author-sidebar">
+      <div class="mobile-top">
+        <a class="profile-avatar" href="#/" aria-label="Will's blog 首页"><img src="assets/avatar.png" alt="Will 的卡通头像" width="100" height="100"><span class="avatar-mood" aria-hidden="true">😓</span></a>
+        <div class="identity"><a class="site-name" href="#/">Will's blog<span class="brand-dot">.</span></a></div>
+        <button class="mobile-menu icon-button" aria-label="展开导航" aria-expanded="false" id="menu-toggle"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+      </div>
+      <a href="https://github.com/eigenwill" target="_blank" rel="noopener noreferrer" class="github-social" aria-label="访问 EigenWill 的 GitHub"><svg viewBox="0 0 24 24"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1-.1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><span>GitHub</span><span class="external-small">↗</span></a>
+      <nav class="main-nav" id="main-nav" aria-label="主要导航">
+        <a href="#/" data-nav="home"><svg viewBox="0 0 24 24"><path d="m3 10 9-7 9 7M5 9v11h14V9M9 20v-7h6v7"/></svg><span>首页</span><small>Home</small></a>
+        <a href="#/archives" data-nav="archives"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1.5"/><path d="M5 8v12h14V8M10 12h4"/></svg><span>归档</span><small>Archives</small></a>
+        <a href="#/search" data-nav="search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>搜索</span><small>Search</small></a>
+        <a href="#/links" data-nav="links"><svg viewBox="0 0 24 24"><path d="m10 13 4-4M8 15l-2 2a3.5 3.5 0 0 0 5 5l4-4a3.5 3.5 0 0 0 0-5m1-4 2-2a3.5 3.5 0 0 0-5-5L9 6a3.5 3.5 0 0 0 0 5" transform="translate(0 -1)"/></svg><span>链接</span><small>Links</small></a>
+        <a href="/admin/"><svg viewBox="0 0 24 24"><path d="m14 4 6 6M4 20l4-1L21 6l-3-3L5 16Z"/></svg><span>写作后台</span><small>Admin</small></a>
+      </nav>
+      <div class="sidebar-bottom"><p class="sidebar-note">在探索中学习，在记录中思考。</p><button id="theme-toggle" class="theme-toggle" aria-label="切换到深色模式"><svg viewBox="0 0 24 24"><path d="M20.9 13a9 9 0 0 1-9.9-9.9A9 9 0 1 0 20.9 13Z"/></svg><span>深色模式</span><span class="switch" aria-hidden="true"><i></i></span></button></div>
+    </aside>
+    <div class="content-column"><main id="main" tabindex="-1"><div class="initial-loading">正在展开笔记…<noscript><p>请启用 JavaScript 阅读本站，或订阅 <a href="/index.xml">RSS 全文</a>。</p></noscript></div></main><footer class="site-footer"><div><span class="footer-line"></span><p>© 2024–2026 <strong>Will's blog</strong></p><p class="footer-detail">保持好奇，慢慢积累。<span>设计灵感来自 <a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener noreferrer">Stack</a> · GitHub Pages</span></p></div></footer></div>
+    <aside class="right-sidebar" id="right-sidebar" aria-label="博客工具"></aside>
+  </div>
+  <button class="back-top icon-button" id="back-top" aria-label="回到顶部"><svg viewBox="0 0 24 24"><path d="m6 12 6-6 6 6M12 6v14"/></svg></button>
+  <div id="toast" class="toast" role="status"></div>
+</body>
+</html>
