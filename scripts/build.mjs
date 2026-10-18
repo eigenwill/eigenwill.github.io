@@ -3,8 +3,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import matter from 'gray-matter';
-import yaml from 'js-yaml';
+import { parseYamlFrontmatter } from './frontmatter.mjs';
 import MarkdownIt from 'markdown-it';
 import sanitizeHtml from 'sanitize-html';
 
@@ -158,7 +157,7 @@ function validateAliases(value, filename) {
 export function parseArticle(source, { filename = 'untitled.md', fallbackDate = new Date(), rewriteImageUrl } = {}) {
   let parsed;
   try {
-    parsed = matter(source, { engines: { yaml: value => yaml.load(value, { schema: yaml.JSON_SCHEMA }) } });
+    parsed = parseYamlFrontmatter(source);
   } catch (error) {
     throw new Error(filename + ': invalid YAML frontmatter: ' + error.message);
   }
@@ -337,6 +336,15 @@ export function articlePage(template, article, url) {
     .replace(/(<main\b[^>]*>)[\s\S]*?(<\/main>)/i, (_match, open, close) => open + content + close);
 }
 
+// Author tools are never part of the public GitHub Pages artifact, even if a
+// stale admin directory is accidentally put back in either static source tree.
+async function copyPublicAssets(source, destination) {
+  await cp(source, destination, {
+    recursive: true,
+    filter: filename => !['admin', 'authoring'].includes(path.relative(source, filename).split(path.sep)[0].toLowerCase())
+  });
+}
+
 export async function buildSite({ root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), siteUrl = process.env.SITE_URL || DEFAULT_URL } = {}) {
   const base = new URL(siteUrl);
   if (base.protocol !== 'https:' && base.hostname !== 'localhost') throw new Error('SITE_URL must use HTTPS.');
@@ -346,9 +354,9 @@ export async function buildSite({ root = path.resolve(path.dirname(fileURLToPath
   await rm(dist, { recursive: true, force: true });
   await mkdir(dist, { recursive: true });
   // The template is required: a missing frontend must fail a deployment.
-  await cp(path.join(root, 'web'), dist, { recursive: true });
+  await copyPublicAssets(path.join(root, 'web'), dist);
   const template = await readFile(path.join(root, 'web/index.html'), 'utf8');
-  try { await cp(path.join(root, 'public'), dist, { recursive: true }); }
+  try { await copyPublicAssets(path.join(root, 'public'), dist); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
   await mkdir(path.join(dist, 'assets'), { recursive: true });
   const publishedArticles = articles.map(({ draft, aliases, ...article }) => article);

@@ -1,6 +1,6 @@
 # 博客日常发布
 
-博客：<https://eigenwill.github.io/>。管理入口：<https://eigenwill.github.io/admin/>。
+博客：<https://eigenwill.github.io/>。作者直接使用 [Pages CMS 文章集合](https://app.pagescms.org/eigenwill/eigenwill.github.io/master/collection/posts)或 [GitHub 上传入口](https://github.com/eigenwill/eigenwill.github.io/upload/master/content/posts)，登录并取得仓库写入权限后操作。
 
 每篇文章使用一个目录，正文和图片放在一起。提交到 GitHub 后，GitHub Actions 自动构建并部署到 GitHub Pages，无需运行本地电脑或维护服务器。
 
@@ -29,17 +29,27 @@ content/posts/
 
 ## 上传本地文章目录
 
-1. 在管理入口下载「文章目录模板」，**先解压 ZIP**。里面有 `my-new-post/index.md` 和 `my-new-post/images/`，包含一张可直接预览的示例图。
+1. 从仓库下载[文章目录模板](../authoring/article-template.zip)，**先解压 ZIP**。里面有 `my-new-post/index.md` 和 `my-new-post/images/`，包含一张可直接预览的示例图。
 2. 将 `my-new-post` 改成文章目录名，在 `index.md` 写正文，修改开头的标题、日期和 `slug`。将文章图片放进 `images/`，按实际文件名修改正文中的图片引用。不需要示例图时可以删除它，同时删掉对应引用。
-3. 可在管理入口点击「检查文章目录」，选择刚才的文章文件夹。预检只在浏览器本地读取文件，不上传、不发布；它检查常用单行信息与常见行内图片语法。引用式图片、HTML 和复杂 Markdown 的最终结果以构建为准。
-4. 点击「上传文章目录」，登录 GitHub，**将整个文章文件夹拖入上传区**。确认文件列表是 `my-post/index.md`、`my-post/images/result.png` 等，保留文章目录层级。不要上传 ZIP，也不要只把 `index.md` 上传到 `content/posts/` 根目录。
-5. 填写提交说明，点击 **Commit changes** 提交到 `master`。在「发布状态」等待最新 Actions 流程变绿，再刷新博客。
+3. 可按下方「本地预检」启动工具，使用「检查文章目录」选择刚才的文章文件夹；这些作者工具只保存在源码仓库，不随博客发布。预检只在浏览器本地读取文件，不上传、不发布；它检查常用单行信息与常见行内图片语法。引用式图片、HTML 和复杂 Markdown 的最终结果以构建为准。
+4. 打开 [GitHub 上传入口](https://github.com/eigenwill/eigenwill.github.io/upload/master/content/posts)，登录有写入权限的 GitHub 账号，**将整个文章文件夹拖入上传区**。确认文件列表是 `my-post/index.md`、`my-post/images/result.png` 等，保留文章目录层级。不要上传 ZIP，也不要只把 `index.md` 上传到 `content/posts/` 根目录。
+5. 填写提交说明，点击 **Commit changes** 提交到 `master`。在 [Actions](https://github.com/eigenwill/eigenwill.github.io/actions) 等待最新部署流程变绿，再刷新博客。
 
 GitHub 网页支持拖入整个文件夹；每次最多上传 100 个文件，每个文件不超过 25 MiB。更多文件可分批上传到同一个文章目录，或使用 GitHub Desktop / Git 同步。操作依据：[GitHub 官方上传说明](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository)。如果浏览器不支持文件夹拖放，可以使用 GitHub Desktop。
 
+## 本地预检（可选）
+
+在源码仓库目录运行：
+
+```sh
+python3 -m http.server 4174 --bind 127.0.0.1 --directory authoring
+```
+
+用浏览器打开 `http://127.0.0.1:4174/`，即可检查文章目录。工具只读取你选择的本地文件，不上传文件，也不保存密码或令牌。通过本地 HTTP 服务打开是为了让浏览器能够加载检查模块，不需要将它部署到网上。使用 Pages CMS 或 GitHub 在线发布时不需要运行这个工具。
+
 ## 在线写作与插入图片
 
-管理入口的「在线写作 / 管理文章」打开 [Pages CMS 文章集合](https://app.pagescms.org/eigenwill/eigenwill.github.io/master/collection/posts)。首次需要你登录 GitHub，并将 Pages CMS App 授权到这个仓库。
+直接打开 [Pages CMS 文章集合](https://app.pagescms.org/eigenwill/eigenwill.github.io/master/collection/posts)。首次需要登录 GitHub，并将 Pages CMS App 授权到这个仓库。后台在服务端检查身份和仓库授权，知道地址不会获得写入权限。它还支持你明确邀请的协作者，请只邀请可信写作者。可以将这个地址加入浏览器书签。
 
 新建文章时填写标题、日期、摘要、分类、标签和 `slug`。正文保存在 `content/posts/<slug>/index.md`，新文章默认为草稿。**先保存一次草稿**，建立文章目录。
 
@@ -99,6 +109,8 @@ draft: false
 
 ## 登录和权限
 
-`/admin/` 是公开管理入口，不保存密码或访问令牌。实际上传、编辑和删除由 GitHub 登录及仓库权限保护；Pages CMS 通过你授权的 GitHub App 写入仓库。
+博客不发布 `/admin/` 页面，也不在公开导航中提供作者入口。旧 `/admin/` 地址从部署内容中删除后返回 404；本地 `authoring/` 工具和模板也不进入发布目录。作者直接在 Pages CMS 或 GitHub 进行操作。
+
+实际上传、编辑和删除由 GitHub 或 Pages CMS 的服务端登录和授权检查保护；Pages CMS 可以通过你授权的 GitHub App 写入仓库。移除公开入口减少了读者误入，真正的权限控制是服务端对身份和仓库授权的验证。GitHub Pages 是静态托管，不能用前端密码实现安全的管理鉴权。详见[安全说明](security.md)。
 
 仓库是公开的，提交的草稿、图片及 Git 历史也可被其他人查看。`draft: true` 只控制博客是否展示文章，不会将仓库文件设为私密。

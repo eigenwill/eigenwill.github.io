@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { checkBundle, checkMarkdown } from '../web/admin/article-check.js';
+import { checkBundle, checkMarkdown } from '../authoring/article-check.js';
 
 const markdown = (body, slug = 'my-post') => `---\ntitle: "文章"\nslug: "${slug}"\ndate: "2026-10-18"\ndraft: false\n---\n\n${body}`;
 function file(relativePath, content = '') {

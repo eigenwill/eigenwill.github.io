@@ -224,13 +224,19 @@ test('plain Markdown dates use first Git addition rather than checkout time', as
   assert.equal(article.date, '2024-04-08');
 });
 
-test('build emits crawlable articles, legacy redirects, full RSS, copied admin, and no drafts', async t => {
+test('build emits readable posts and feeds while excluding all author interfaces and drafts', async t => {
   const directory = await fixture(t);
   await mkdir(path.join(directory, 'web/admin'), { recursive: true });
   await mkdir(path.join(directory, 'public/uploads'), { recursive: true });
   const template = '<!doctype html><html><head><base href="/"><title>Blog</title><meta name="description" content="Blog"><link rel="canonical" href="https://eigenwill.github.io/"></head><body><main id="main">Loading…</main></body></html>';
   await writeFile(path.join(directory, 'web/index.html'), template);
-  await writeFile(path.join(directory, 'web/admin/index.html'), '<p>CMS</p>');
+  await writeFile(path.join(directory, 'web/admin/index.html'), '<p>Do not publish this old author interface</p>');
+  await mkdir(path.join(directory, 'public/admin'), { recursive: true });
+  await writeFile(path.join(directory, 'public/admin/private.js'), 'doNotPublish');
+  await mkdir(path.join(directory, 'public/authoring'), { recursive: true });
+  await writeFile(path.join(directory, 'public/authoring/template.zip'), 'doNotPublish');
+  await mkdir(path.join(directory, 'authoring'), { recursive: true });
+  await writeFile(path.join(directory, 'authoring/index.html'), 'local author tools');
   await writeFile(path.join(directory, 'public/google-test.html'), 'verification');
   await writeFile(path.join(directory, 'content/posts/example.md'), post('title: Example\ndate: 2026-10-18\naliases: [/p/旧地址/]', '## The body\n\nFull article.'));
   await writeFile(path.join(directory, 'content/posts/draft.md'), post('draft: true'));
@@ -241,7 +247,8 @@ test('build emits crawlable articles, legacy redirects, full RSS, copied admin, 
   assert.match(await readFile(path.join(directory, 'dist/p/旧地址/index.html'), 'utf8'), /https:\/\/eigenwill.github.io\/p\/example\//);
   assert.match(await readFile(path.join(directory, 'dist/index.xml'), 'utf8'), /&lt;h2 id=&quot;the-body&quot;&gt;/);
   assert.doesNotMatch(await readFile(path.join(directory, 'dist/assets/articles.json'), 'utf8'), /"draft"/);
-  assert.equal(await readFile(path.join(directory, 'dist/admin/index.html'), 'utf8'), '<p>CMS</p>');
+  await assert.rejects(access(path.join(directory, 'dist/admin')), { code: 'ENOENT' });
+  await assert.rejects(access(path.join(directory, 'dist/authoring')), { code: 'ENOENT' });
   assert.equal(await readFile(path.join(directory, 'dist/google-test.html'), 'utf8'), 'verification');
   assert.equal(await readFile(path.join(directory, 'dist/.nojekyll'), 'utf8'), '');
   assert.match(await readFile(path.join(directory, 'dist/archives/index.html'), 'utf8'), /https:\/\/eigenwill.github.io\/#\/archives/);
