@@ -1,9 +1,18 @@
 # Pages CMS: https://app.pagescms.org/eigenwill/eigenwill.github.io/master
 # Configuration reference: https://pagescms.org/docs/configuration/
 media:
-  input: public/uploads
-  output: /uploads
-  rename: safe
+  - name: article_images
+    label: 文章图片（先进入文章目录 / images）
+    input: content/posts
+    output: /content/posts
+    categories: [image]
+    rename: safe
+  - name: legacy_uploads
+    label: 旧公共图片
+    input: public/uploads
+    output: /uploads
+    categories: [image]
+    rename: safe
 
 content:
   - name: posts
@@ -12,10 +21,16 @@ content:
     path: content/posts
     format: yaml-frontmatter
     filename:
-      template: "{year}-{month}-{day}-{primary}.md"
-      field: create
+      template: "{fields.slug}/index.md"
+      # Keep this hidden: an editable filename is reduced to its final path segment.
+      field: false
     subfolders: true
+    exclude: [images, README.md, .gitkeep]
     view:
+      layout: tree
+      node:
+        filename: index.md
+        hideDirs: others
       fields: [title, date, category, draft]
       primary: title
       sort: [date, title]
@@ -47,11 +62,12 @@ content:
         type: string
         list: true
       - name: slug
-        label: 文章链接名称
+        label: 文章目录与链接名称
         type: string
-        description: 可选。推荐使用小写英文字母、数字和连字符；发布后保持不变。
+        required: true
+        description: 必填，例如 my-first-post。新建时生成 my-first-post/index.md；发布后保持不变，修改此字段不会移动已有目录或图片。
         pattern:
-          regex: "^(?:[a-z0-9]+(?:-[a-z0-9]+)*)?$"
+          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           message: 请使用小写英文字母、数字和连字符，例如 my-first-post。
       - name: draft
         label: 保存为草稿
@@ -62,6 +78,8 @@ content:
         label: 正文
         type: rich-text
         required: true
+        description: 先保存草稿以建立文章目录。插入图片时，进入与上方文章目录名称对应的目录，再进入或创建 images 文件夹后上传。源码模式也可引用 ./images/文件名；图片按文章分别保存。
         options:
           format: markdown
           switcher: true
+          media: article_images

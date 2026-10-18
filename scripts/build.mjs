@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { cp, lstat, mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import path from 'node:path';
@@ -13,6 +13,9 @@ const DEFAULT_URL = 'https://eigenwill.github.io';
 const META_FIELDS = new Set(['title', 'date', 'description', 'category', 'tags', 'slug', 'draft', 'originalUrl', 'aliases', 'math', 'license', 'image', 'comments', 'hidden']);
 const booleanFields = ['draft', 'math', 'comments', 'hidden'];
 const MAX_POST_SIZE = 2 * 1024 * 1024;
+const IMAGE_EXTENSION = /\.(?:png|jpe?g|webp|gif|avif|svg)$/i;
+// Source paths are build-only data and must never enter the public article JSON.
+const articleImages = new WeakMap();
 const xml = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c]);
 const escapeHtml = value => String(value).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
@@ -81,8 +84,8 @@ markdown.core.ruler.after('inline', 'heading_ids', state => {
     state.tokens[index].attrSet('id', id);
   }
 });
-export function renderMarkdown(source) {
-  return sanitizeHtml(markdown.render(source), {
+function sanitizeArticleHtml(html, rewriteImageUrl = value => value) {
+  return sanitizeHtml(html, {
     allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img', 'details', 'summary', 'figure', 'figcaption', 'kbd', 'samp', 'del'],
     allowedAttributes: {
       a: ['href', 'title', 'rel'],
@@ -99,10 +102,14 @@ export function renderMarkdown(source) {
     allowedSchemesByTag: { img: ['https', 'http'] },
     allowProtocolRelative: false,
     transformTags: {
-      a: (tagName, attribs) => ({ tagName, attribs: { ...attribs, rel: 'noopener noreferrer' } }),
-      img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, loading: 'lazy' } })
+      a: (tagName, attribs) => ({ tagName, attribs: { ...attribs, ...(attribs.href ? { href: rewriteImageUrl(attribs.href, { tagName }) } : {}), rel: 'noopener noreferrer' } }),
+      img: (tagName, attribs) => ({ tagName, attribs: { ...attribs, ...(attribs.src ? { src: rewriteImageUrl(attribs.src, { tagName }) } : {}), loading: 'lazy' } })
     }
   });
+}
+
+export function renderMarkdown(source, { rewriteImageUrl } = {}) {
+  return sanitizeArticleHtml(markdown.render(source), rewriteImageUrl);
 }
 
 export function normalizeSlug(value) {
@@ -148,7 +155,7 @@ function validateAliases(value, filename) {
   return [...new Set(value)];
 }
 
-export function parseArticle(source, { filename = 'untitled.md', fallbackDate = new Date() } = {}) {
+export function parseArticle(source, { filename = 'untitled.md', fallbackDate = new Date(), rewriteImageUrl } = {}) {
   let parsed;
   try {
     parsed = matter(source, { engines: { yaml: value => yaml.load(value, { schema: yaml.JSON_SCHEMA }) } });
@@ -163,7 +170,8 @@ export function parseArticle(source, { filename = 'untitled.md', fallbackDate = 
   for (const key of booleanFields) {
     if (data[key] !== undefined && typeof data[key] !== 'boolean') throw new Error(filename + ': ' + key + ' must be true or false.');
   }
-  const stem = path.basename(filename, path.extname(filename)).replace(/^\d{4}-\d{2}-\d{2}-/, '');
+  const basename = path.basename(filename, path.extname(filename));
+  const stem = (basename.toLowerCase() === 'index' ? path.basename(path.dirname(filename)) : basename).replace(/^\d{4}-\d{2}-\d{2}-/, '');
   const heading = parsed.content.match(/^#\s+(.+?)\s*#*\s*$/m)?.[1];
   const title = data.title === undefined ? undefined : shortString(data, 'title', filename, 240, { optional: false, nullable: false });
   const inferredTitle = heading?.replace(/[\x60*_]/g, '').replace(/<[^>]*>/g, '').trim() || stem.replace(/[-_]+/g, ' ');
@@ -185,7 +193,7 @@ export function parseArticle(source, { filename = 'untitled.md', fallbackDate = 
       if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error();
     } catch { throw new Error(filename + ': originalUrl must be an HTTP(S) URL.'); }
   }
-  const html = renderMarkdown(parsed.content);
+  const html = renderMarkdown(parsed.content, { rewriteImageUrl });
   const plainText = sanitizeHtml(html, { allowedTags: [], allowedAttributes: {} }).replace(/\s+/g, ' ').trim();
   const cjkCount = (plainText.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/gu) || []).length;
   const latinWords = (plainText.replace(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/gu, ' ').match(/[\p{L}\p{N}]+/gu) || []).length;
@@ -204,17 +212,79 @@ export function parseArticle(source, { filename = 'untitled.md', fallbackDate = 
   };
 }
 
-async function markdownFiles(directory) {
+async function markdownFiles(directory, { bundleDirectory = false } = {}) {
   let entries;
   try { entries = await readdir(directory, { withFileTypes: true }); }
   catch (error) { if (error.code === 'ENOENT') return []; throw error; }
   const files = [];
+  const indexes = entries.filter(entry => entry.isFile() && /^index\.(?:md|markdown)$/i.test(entry.name));
+  if (indexes.length && !bundleDirectory) throw new Error(directory + ': put index.md or index.markdown inside an article subdirectory, such as my-post/index.md; a root index file would hide other posts.');
+  if (indexes.length > 1) throw new Error(directory + ': a post directory must contain only one index.md or index.markdown.');
+  // An index file marks a bundle. Sidecar Markdown files are never articles.
+  if (indexes.length) return [path.join(directory, indexes[0].name)];
   for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
     const fullPath = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...await markdownFiles(fullPath));
+    if (entry.isDirectory() && entry.name.toLowerCase() !== 'images') files.push(...await markdownFiles(fullPath, { bundleDirectory: true }));
     else if (entry.isFile() && /\.(?:md|markdown)$/i.test(entry.name)) files.push(fullPath);
   }
   return files;
+}
+
+async function bundleImages(directory) {
+  const files = new Map();
+  const imagesDirectory = path.join(directory, 'images');
+  async function visit(current, relative = '') {
+    let info;
+    try { info = await lstat(current); }
+    catch (error) { if (error.code === 'ENOENT' && !relative) return; throw error; }
+    if (info.isSymbolicLink()) throw new Error(current + ': symbolic links are not allowed in post images.');
+    if (!info.isDirectory()) throw new Error(current + ': images must be a directory.');
+    for (const entry of await readdir(current, { withFileTypes: true })) {
+      const filename = path.join(current, entry.name);
+      const assetPath = relative ? relative + '/' + entry.name : entry.name;
+      if (entry.isSymbolicLink()) throw new Error(filename + ': symbolic links are not allowed in post images.');
+      if (entry.isDirectory()) await visit(filename, assetPath);
+      else if (entry.isFile() && IMAGE_EXTENSION.test(entry.name)) files.set(assetPath, filename);
+    }
+  }
+  await visit(imagesDirectory);
+  return files;
+}
+
+function imageUrlRewriter(record, bundles) {
+  return (value, { tagName }) => {
+    // Keep external and existing public URLs intact. CMS repository paths are
+    // the one absolute-source-path form that needs translating to a public URL.
+    if (/^(?:[a-z][a-z\d+.-]*:|\/\/|#|\?)/i.test(value)) return value;
+    const boundary = value.search(/[?#]/);
+    const rawPath = boundary < 0 ? value : value.slice(0, boundary);
+    const suffix = boundary < 0 ? '' : value.slice(boundary);
+    let decoded;
+    try { decoded = decodeURIComponent(rawPath); }
+    catch { throw new Error(record.filename + ': invalid URL encoding in image path "' + value + '".'); }
+    const repositoryPath = decoded.replace(/^\/?(?:\.\/)?content\/posts\//, '');
+    const fromRepository = repositoryPath !== decoded;
+    if (decoded.startsWith('/') && !fromRepository) return value;
+    const isImage = tagName === 'img' || IMAGE_EXTENSION.test(decoded) || /(?:^|\/)images\//.test(decoded);
+    if (!isImage) return value;
+    const segments = (fromRepository ? repositoryPath : decoded).split('/');
+    if (segments.some(segment => segment === '..' || segment.includes('\\') || /[\u0000-\u001f]/.test(segment))) {
+      throw new Error(record.filename + ': image path must stay inside its post images/ directory: "' + value + '".');
+    }
+    let owner = record;
+    let localPath = decoded.replace(/^(?:\.\/)+/, '');
+    if (fromRepository) {
+      const marker = repositoryPath.indexOf('/images/');
+      owner = marker < 0 ? undefined : bundles.get(repositoryPath.slice(0, marker));
+      localPath = marker < 0 ? '' : repositoryPath.slice(marker + 1);
+    }
+    if (!owner?.images || !localPath.startsWith('images/') || !IMAGE_EXTENSION.test(localPath)) {
+      throw new Error(record.filename + ': local images must use images/ and a supported image extension: "' + value + '".');
+    }
+    const assetPath = localPath.slice('images/'.length);
+    if (!owner.images.has(assetPath)) throw new Error(record.filename + ': image not found in post images/: "' + value + '".');
+    return '/p/' + encodeURIComponent(owner.article.id) + '/images/' + assetPath.split('/').map(encodeURIComponent).join('/') + suffix;
+  };
 }
 
 async function fallbackFileDate(filename, root) {
@@ -227,15 +297,29 @@ async function fallbackFileDate(filename, root) {
 }
 
 export async function buildArticles(postsDir, { root = path.resolve(postsDir, '../..') } = {}) {
-  const articles = [];
+  const records = [];
   const ids = new Set();
   for (const filename of await markdownFiles(postsDir)) {
-    if ((await stat(filename)).size > MAX_POST_SIZE) throw new Error(filename + ': Markdown exceeds the 2 MB limit. Store images in public/uploads/.');
-    const article = parseArticle(await readFile(filename, 'utf8'), { filename, fallbackDate: await fallbackFileDate(filename, root) });
+    if ((await stat(filename)).size > MAX_POST_SIZE) throw new Error(filename + ': Markdown exceeds the 2 MB limit. Store images in the post images/ directory.');
+    const source = await readFile(filename, 'utf8');
+    const fallbackDate = await fallbackFileDate(filename, root);
+    const article = parseArticle(source, { filename, fallbackDate });
     if (ids.has(article.id)) throw new Error(filename + ': duplicate slug "' + article.id + '". Every post, including drafts, needs a unique slug.');
     ids.add(article.id);
-    if (!article.draft) articles.push(article);
+    if (!article.draft) records.push({ filename, source, fallbackDate, article });
   }
+  const bundles = new Map();
+  for (const record of records) {
+    if (!/^index\.(?:md|markdown)$/i.test(path.basename(record.filename))) continue;
+    record.images = await bundleImages(path.dirname(record.filename));
+    bundles.set(path.relative(postsDir, path.dirname(record.filename)).split(path.sep).join('/'), record);
+  }
+  const articles = records.map(record => {
+    if (!record.images) return record.article;
+    const article = parseArticle(record.source, { filename: record.filename, fallbackDate: record.fallbackDate, rewriteImageUrl: imageUrlRewriter(record, bundles) });
+    articleImages.set(article, record.images);
+    return article;
+  });
   return articles.sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
 }
 
@@ -288,6 +372,11 @@ export async function buildSite({ root = path.resolve(path.dirname(fileURLToPath
     const articleFile = path.join(dist, canonicalPath, 'index.html');
     await mkdir(path.dirname(articleFile), { recursive: true });
     await writeFile(articleFile, articlePage(template, article, url));
+    for (const [assetPath, source] of articleImages.get(article) || []) {
+      const destination = path.join(dist, 'p', article.id, 'images', ...assetPath.split('/'));
+      await mkdir(path.dirname(destination), { recursive: true });
+      await cp(source, destination);
+    }
     const aliases = new Set(article.aliases);
     for (const alias of aliases) {
       if (alias === canonicalPath) continue;
@@ -298,7 +387,10 @@ export async function buildSite({ root = path.resolve(path.dirname(fileURLToPath
       await writeFile(destination, redirectHtml(url, article.title));
     }
   }
-  const rssItems = articles.map(article => '<item><title>' + xml(article.title) + '</title><link>' + xml(origin + '/p/' + encodeURIComponent(article.id) + '/') + '</link><guid isPermaLink="true">' + xml(origin + '/p/' + encodeURIComponent(article.id) + '/') + '</guid><pubDate>' + new Date(article.date + 'T00:00:00Z').toUTCString() + '</pubDate><description>' + xml(article.description) + '</description><content:encoded>' + xml(article.html) + '</content:encoded></item>').join('\n');
+  const rssItems = articles.map(article => {
+    const feedHtml = sanitizeArticleHtml(article.html, value => value.startsWith('/') && !value.startsWith('//') ? origin + value : value);
+    return '<item><title>' + xml(article.title) + '</title><link>' + xml(origin + '/p/' + encodeURIComponent(article.id) + '/') + '</link><guid isPermaLink="true">' + xml(origin + '/p/' + encodeURIComponent(article.id) + '/') + '</guid><pubDate>' + new Date(article.date + 'T00:00:00Z').toUTCString() + '</pubDate><description>' + xml(article.description) + '</description><content:encoded>' + xml(feedHtml) + '</content:encoded></item>';
+  }).join('\n');
   await writeFile(path.join(dist, 'rss.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Will\'s blog</title><link>' + xml(origin) + '/</link><description>一些学习，一些记录。</description><language>zh-CN</language>' + rssItems + '</channel></rss>\n');
   // Keep the previous Hugo feed URL working too.
   await cp(path.join(dist, 'rss.xml'), path.join(dist, 'index.xml'));

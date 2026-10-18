@@ -1,34 +1,55 @@
 # 博客日常发布
 
-博客地址：<https://eigenwill.github.io/>。文章管理入口：<https://eigenwill.github.io/admin/>。
+博客：<https://eigenwill.github.io/>。管理入口：<https://eigenwill.github.io/admin/>。
 
-文章保存在 GitHub 仓库的 `content/posts/` 中。每次提交后，GitHub Actions 自动构建并部署到 GitHub Pages。无需租用服务器或维护数据库。
+每篇文章使用一个目录，正文和图片放在一起。提交到 GitHub 后，GitHub Actions 自动构建并部署到 GitHub Pages，无需运行本地电脑或维护服务器。
 
-## 上传本地 Markdown
+## 推荐结构
 
-1. 写好 UTF-8 编码的 `.md` 或 `.markdown` 文件。可以在管理入口下载模板；建议使用有意义的文件名，如 `2026-10-18-my-new-post.md`。
-2. 在管理入口点击「上传 Markdown」，登录 GitHub，将文件拖入上传区。填写提交说明，点击 **Commit changes**，提交到 `master` 分支。
-3. 打开管理入口的「发布状态」，等待最新一次 GitHub Actions 流程变为绿色，再刷新博客。构建和部署通常需要几分钟。
-
-管理入口的「检查文件」只会在浏览器本地读取文件，检查常用信息，不会将文件上传到服务器，也不会自动发布。最终是否发布成功，以 GitHub Actions 的状态为准。
-
-## 在线写作与图片
-
-打开管理入口中的「在线写作 / 管理文章」，进入此仓库的 [Pages CMS 文章集合](https://app.pagescms.org/eigenwill/eigenwill.github.io/master/collection/posts)。
-
-首次使用需要你自己登录 GitHub，并将 Pages CMS 的 GitHub App 安装并授权到 `eigenwill/eigenwill.github.io` 仓库。仅授权你希望它管理的仓库即可。这一步需要仓库所有者亲自完成。
-
-进入仓库后，可以在文章集合中新建或编辑文章，填写标题、日期、摘要、分类和标签，并添加图片。新建文章默认为草稿；准备发布时，关闭「草稿」后保存。保存会将改动写入 GitHub，同样触发自动构建与部署。
-
-图片存放在仓库的 `public/uploads/`，博客中对应 `/uploads/` 路径。例如图片文件 `public/uploads/example.png`，Markdown 写法为：
-
-```markdown
-![图片说明](/uploads/example.png)
+```text
+content/posts/
+├── quantum-transport/
+│   ├── index.md
+│   └── images/
+│       ├── diagram.png
+│       └── result.png
+└── arch-linux/
+    ├── index.md
+    └── images/
+        └── desktop.png
 ```
 
-直接用 GitHub 上传图片时，请放进 `public/uploads/`；上传文章时，请放进 `content/posts/`。
+正文使用相对图片路径：
 
-## 推荐的文章格式
+```markdown
+![实验结果](./images/result.png)
+```
+
+图片与正文一起备份、移动或删除。不同文章的 `images/` 中可以使用同名文件，互不覆盖。目录名建议使用小写英文字母、数字和连字符，并与 `slug` 一致。已发布文章请保持 `slug` 稳定，避免已分享链接失效；目录名与 `slug` 不同也可以，文章网址仍由 `slug` 决定。
+
+## 上传本地文章目录
+
+1. 在管理入口下载「文章目录模板」，**先解压 ZIP**。里面有 `my-new-post/index.md` 和 `my-new-post/images/`，包含一张可直接预览的示例图。
+2. 将 `my-new-post` 改成文章目录名，在 `index.md` 写正文，修改开头的标题、日期和 `slug`。将文章图片放进 `images/`，按实际文件名修改正文中的图片引用。不需要示例图时可以删除它，同时删掉对应引用。
+3. 可在管理入口点击「检查文章目录」，选择刚才的文章文件夹。预检只在浏览器本地读取文件，不上传、不发布；它检查常用单行信息与常见行内图片语法。引用式图片、HTML 和复杂 Markdown 的最终结果以构建为准。
+4. 点击「上传文章目录」，登录 GitHub，**将整个文章文件夹拖入上传区**。确认文件列表是 `my-post/index.md`、`my-post/images/result.png` 等，保留文章目录层级。不要上传 ZIP，也不要只把 `index.md` 上传到 `content/posts/` 根目录。
+5. 填写提交说明，点击 **Commit changes** 提交到 `master`。在「发布状态」等待最新 Actions 流程变绿，再刷新博客。
+
+GitHub 网页支持拖入整个文件夹；每次最多上传 100 个文件，每个文件不超过 25 MiB。更多文件可分批上传到同一个文章目录，或使用 GitHub Desktop / Git 同步。操作依据：[GitHub 官方上传说明](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository)。如果浏览器不支持文件夹拖放，可以使用 GitHub Desktop。
+
+## 在线写作与插入图片
+
+管理入口的「在线写作 / 管理文章」打开 [Pages CMS 文章集合](https://app.pagescms.org/eigenwill/eigenwill.github.io/master/collection/posts)。首次需要你登录 GitHub，并将 Pages CMS App 授权到这个仓库。
+
+新建文章时填写标题、日期、摘要、分类、标签和 `slug`。正文保存在 `content/posts/<slug>/index.md`，新文章默认为草稿。**先保存一次草稿**，建立文章目录。
+
+插入图片时，使用编辑器的「插入图片」打开媒体选择器，进入 **当前文章目录**，建立或打开其中的 **`images/`**，再上传、选择图片。例如给 `my-new-post` 插图时，选择 `my-new-post/images/`。随后可继续编辑；准备发布时关闭「草稿」并保存。
+
+Pages CMS 的媒体选择器不能自动切到当前文章的 `images/`。每次上传前请核对当前路径，**不要直接将本地图片拖入或粘贴到正文**，否则 CMS 可能将图片上传到文章根目录。CMS 插入的 `/content/posts/my-new-post/images/result.png` 路径会在构建时转换为正确的公开地址；本地写作仍推荐 `./images/result.png`。
+
+图片目录不存在时，也可以先通过 GitHub 上传文章目录，或在对应 `images/` 中添加 `.gitkeep` 占位文件。Git 不保存空目录，模板已包含这个占位文件。
+
+## 正文格式
 
 ```markdown
 ---
@@ -44,39 +65,40 @@ draft: false
 ## 从这里开始
 
 文章正文。
+
+![实验结果](./images/result.png)
 ```
 
 | 字段 | 用法 |
 | --- | --- |
-| `title` | 显示在文章列表和正文页的标题。 |
+| `title` | 文章列表和正文页的标题。 |
 | `date` | 发布日期，建议使用带引号的 `YYYY-MM-DD`。 |
-| `description` | 列表页显示的摘要。 |
-| `category` | 一个分类名称，如「半导体物理」「Linux」「学习笔记」。 |
+| `description` | 文章列表中的摘要。 |
+| `category` | 一个分类名称，如「半导体物理」「Linux」。 |
 | `tags` | 标签列表，如 `["Linux", "笔记"]`。 |
-| `slug` | 文章地址中的标识，建议使用小写英文字母、数字和连字符。发布后尽量保持稳定。 |
-| `draft` | `true` 为草稿，不出现在公开博客；`false` 为发布文章。 |
+| `slug` | 文章网址标识，发布后尽量保持稳定。新建目录建议同名。 |
+| `draft` | 不带引号的 `true` 为草稿，`false` 为发布。 |
 
-只上传没有 YAML 信息区的 Markdown 也可以。系统会用正文的第一个一级标题作为标题；没有一级标题时，使用去掉日期前缀的文件名。日期默认取文件首次加入 Git 的时间，本地未跟踪的文件才使用文件修改时间；文章标识默认由去掉日期前缀的文件名生成。需要准确稳定的日期、分类、标签、摘要和文章地址时，请使用上面的格式显式填写。
+正文支持常见 Markdown、代码块、表格和数学公式。没有 YAML 信息区也能构建，系统会从正文和目录名推断基本信息；需要准确稳定的标题、日期和网址时，请明确填写。日期默认取文章首次加入 Git 的时间，本地未跟踪的文件使用文件修改时间。
 
-正文支持常见 Markdown 写法、代码块、表格与数学公式。请将文章内容写在第二个 `---` 之后。
+旧的单文件 `.md` / `.markdown` 文章仍可使用。旧 `/uploads/...` 图片链接继续有效，`public/uploads/` 保留兼容；新文章请使用自己的目录，不再将图片统一堆放在这里。
 
-## 修改、下线和删除文章
+## 修改、下线与删除
 
-- 修改：在 Pages CMS 编辑并保存，或打开「查看文章源」，找到对应文件，在 GitHub 编辑后提交。
-- 暂时下线：把文章的 `draft` 改为 `true` 并提交。草稿文件仍保留在仓库中。
-- 删除：在 Pages CMS 或 GitHub 删除文章文件并提交。等待构建完成后，公开博客会移除它。
+- 修改：在 Pages CMS 或 GitHub 编辑对应的 `index.md`。替换图片时，进入该文章的 `images/`；请保留原目录名与 `slug`。
+- 暂时下线：将 `draft` 改为 `true` 并提交。图片和正文留在仓库，公开博客会在构建后移除文章。
+- 删除：删除整篇文章目录并提交，让正文和图片一并移除。只在 CMS 删除 `index.md` 可能留下图片，请另外清理其目录。
 
-同名文件可能覆盖仓库中已有文章。上传新文章时使用独立文件名；修改旧文章时保留原文件与 `slug`，避免改变已分享的链接。
+上传到相同路径会覆盖已有文件；新文章请使用独立目录。移动或重命名源目录时应连同 `images/` 一起操作，并核对 CMS 插入的绝对源路径。
 
 ## 发布没有更新时
 
-1. 打开仓库的 **Actions**，查看最新一次流程是否成功。如果仍在运行，请稍后刷新。
-2. 如果失败，打开失败步骤的日志，检查文章 YAML 是否缺少引号、列表格式是否正确、文件是否放在 `content/posts/`。
-3. 如果流程已经成功，刷新博客；必要时使用浏览器强制刷新。
-4. 检查文章是否写了 `draft: true`。草稿不会被发布。
+1. 打开仓库 **Actions**，确认最新流程已成功；仍在运行时稍后刷新。
+2. 如果失败，打开日志。检查 YAML、目录层级、重复 `slug`、缺失图片及文件名大小写。图片引用须指向已提交的文件，不能是电脑上的本地绝对路径。
+3. 流程成功后刷新博客，必要时强制刷新；确认文章没有 `draft: true`。
 
 ## 登录和权限
 
-`/admin/` 是公开的管理入口。它不包含密码或访问令牌，也不能绕过仓库权限修改内容。真正的上传、编辑和删除操作在 GitHub 或通过你授权的 Pages CMS 完成，并受 GitHub 登录与仓库权限保护。
+`/admin/` 是公开管理入口，不保存密码或访问令牌。实际上传、编辑和删除由 GitHub 登录及仓库权限保护；Pages CMS 通过你授权的 GitHub App 写入仓库。
 
-仓库是公开的，因此提交到仓库的文章草稿、图片及其 Git 历史也可以被其他人查看。`draft: true` 只控制文章是否出现在公开博客，不会将仓库中的文件设为私密。
+仓库是公开的，提交的草稿、图片及 Git 历史也可被其他人查看。`draft: true` 只控制博客是否展示文章，不会将仓库文件设为私密。
